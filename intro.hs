@@ -35,15 +35,15 @@ divide k l = (take k l, reverse $ take (length l - k) $ reverse l)
 -- ghci> delete 3 [0,0,0,1,0,0,0]
 -- [0,0,0,0,0,0]
 delete :: Int -> [a] -> [a]
-delete k l = (init $ fst nabor) ++ snd nabor 
+delete k l = (init $ fst nabor) ++ snd nabor -- oklepaji zato, ker je $ po precendenci šibak
 		where
-		nabor = divide k l 
+		nabor = divide k l
 
 -- slice i k l returns the sub-list of l from the i-th up to (excluding) the k-th element
-
 -- Example:
 -- ghci> slice 3 6 [0,0,0,1,2,3,0,0,0]
 -- [1,2,3]
+slice i k l :: Int -> Int -> [a] -> [a]
 slice i k l = undefined
 
 -- insert x k l inserts x at index k into l
