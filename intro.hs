@@ -43,7 +43,8 @@ delete k l = (init $ fst nabor) ++ snd nabor -- oklepaji zato, ker je $ po prece
 -- Example:
 -- ghci> slice 3 6 [0,0,0,1,2,3,0,0,0]
 -- [1,2,3]
-slice i k l :: Int -> Int -> [a] -> [a]
+
+-- slice i k l :: Int -> Int -> [a] -> [a]
 slice i k l = undefined
 
 -- insert x k l inserts x at index k into l
