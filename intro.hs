@@ -2,6 +2,8 @@
  - Exercise 1: Introduction to Haskell
  -}
 
+:set prompt "ghci> "
+
 -- penultimateElement l returns the second-to-last element of the list l
 penultimateElement :: [a] -> a
 penultimateElement l = last $ init l
