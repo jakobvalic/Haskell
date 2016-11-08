@@ -2,7 +2,8 @@
  - Exercise 1: Introduction to Haskell
  -}
 
--- set prompt "ghci> " -- doesn't work...
+-- nastavi niz = set prompt niz 
+-- nastavi "ghci> "
 
 
 -- penultimateElement l returns the second-to-last element of the list l
@@ -39,7 +40,7 @@ divide k l = (take k l, reverse $ take (length l - k) $ reverse l)
 -- ghci> delete 3 [0,0,0,1,0,0,0]
 -- [0,0,0,0,0,0]
 delete :: Int -> [a] -> [a]
-delete k l = (init $ fst nabor) ++ snd nabor -- parenthesis because $ has low precedence
+delete k l = (init $ fst nabor) ++ snd nabor -- oklepaji zato, ker je $ po precendenci šibak
 		where
 		nabor = divide k l
 
@@ -55,7 +56,7 @@ slice i k l = snd $ divide i $ fst $ divide k l
 -- Example:
 -- ghci> insert 2 5 [0,0,0,0,0,0]
 -- [0,0,0,0,0,2,0]
-insert :: a -> Int -> [a] -> [a] -- a stands for Int or Char or String or list
+insert :: a -> Int -> [a] -> [a] -- a lahko predstavlja črke ali števila
 insert x k l = (fst $ divide k l) ++ [x] ++ (snd $ divide k l)
 
 -- rotate n l rotates l to the left by n places
@@ -80,7 +81,7 @@ remove x l = [znak | znak <- l, znak /= x]
 -- True
 -- ghci> isPalindrome [1,2,3]
 -- False
-isPalindrome :: Eq a => [a] -> Bool -- a has to be comparable therefore 'Eq a =>'
+isPalindrome :: Eq a => [a] -> Bool -- a mora biti primerljiv, zato Eq a =>
 isPalindrome l = (take p l) == (take p $ reverse l)
 		where p = length l `div` 2
 	
@@ -91,7 +92,7 @@ isPalindrome l = (take p l) == (take p $ reverse l)
 -- [2,10,7,6]
 -- pointwiseMax :: Ord a => [a] -> [a] -> [a]
 pointwiseMax l1 l2  
-		| l1 == [] || l2 == [] = -- exit condition
+		| l1 == [] || l2 == [] = -- zaustavitveni pogoj
 			[]
 		| otherwise = 
 			[max (head l1) (head l2)] ++ pointwiseMax (tail l1) (tail l2)
@@ -101,9 +102,7 @@ pointwiseMax l1 l2
 -- Example:
 -- ghci> secondLargest [1,10,5,6]
 -- 6
-secondLargest :: Ord a => [a] -> a -- '-> Int' doesn't work as a stands for Int / Char / String / list
+secondLargest :: Ord a => [a] -> a -- ne gre -> Int, saj je a lahko tudi niz ali nabor ali seznam
 secondLargest l = maximum [x | x <- l, x /= maximum l]
 
--- Haskell is great.
--- Entering 'č' || 'š' || 'ž' causes Notepadd++ GHCi console to crash :)
-
+-- če napiše ŠUMNIK, se (notepad++)-ov ghci sesuje :)
