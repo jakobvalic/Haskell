@@ -43,15 +43,16 @@ delete k l = (init $ fst nabor) ++ snd nabor -- oklepaji zato, ker je $ po prece
 -- Example:
 -- ghci> slice 3 6 [0,0,0,1,2,3,0,0,0]
 -- [1,2,3]
+slice :: Int -> Int -> [a] -> [a]
+slice i k l = snd $ divide i $ fst $ divide k l
 
--- slice i k l :: Int -> Int -> [a] -> [a]
-slice i k l = undefined
 
 -- insert x k l inserts x at index k into l
 -- Example:
 -- ghci> insert 2 5 [0,0,0,0,0,0]
 -- [0,0,0,0,0,2,0]
-insert x k l = undefined
+insert :: a -> Int -> [a] -> [a] -- ZAKAJ NA ZAČETKU A???
+insert x k l = (fst $ divide k l) ++ [x] ++ (snd $ divide k l)
 
 -- rotate n l rotates l to the left by n places
 -- Example:
