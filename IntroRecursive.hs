@@ -23,6 +23,8 @@ penultimateElement [] = undefined
 penultimateElement [x] = undefined
 penultimateElement [x , y] = x
 penultimateElement (x : xs) = penultimateElement xs
+-- dobro je spremeniti tabulatorje v presledke (Nastavitve -> Jezik -> Zamenjaj s presledki)
+
 
 -- **
 -- 'append l1 l2' appends the list l2 at the end of l1, like the (++) operator
@@ -30,7 +32,7 @@ append :: [a] -> [a] -> [a]
 append l1 [] = l1
 append [] l2 = l2
 append (head : tail) l2 = head : (append tail l2)
--- append l1 (head : tail) = append (l1 ++ [head]) tail
+
 
 -- **
 -- 'get k l' returns the k-th element in the list l
@@ -38,11 +40,12 @@ append (head : tail) l2 = head : (append tail l2)
 -- ghci> get 2 [0,0,1,0,0,0]
 -- 1
 get :: Int -> [a] -> a
-get k (head : tail)
-	| k == 0 = head
-	| otherwise = get (k - 1) tail
--- get 0 (x : xs) = x
--- get k (x : xs) = get (k - 1) xs  
+get 0 (x : xs) = x
+get k (x : xs) = get (k - 1) xs
+-- get k (head : tail) -- NI POTREBE ZA PISANJE NA TAK NAÈIN
+    -- | k == 0 = head
+    -- | otherwise = get (k - 1) tail
+ 
 
 -- **
 -- 'double l' "doubles" the list l
@@ -51,7 +54,8 @@ get k (head : tail)
 -- ghci> double [1,2,3,3]
 -- [1,1,2,2,3,3,3,3]
 double :: [a] -> [a]
-double l = l
+double (glava : []) = glava : [glava]
+double (glava : rep) = append (glava : [glava]) (double rep) -- :)
 
 
 -- ***
@@ -69,9 +73,11 @@ divide = undefined
 -- ghci> delete 3 [0,0,0,1,0,0,0]
 -- [0,0,0,0,0,0]
 delete :: Int -> [a] -> [a]
-delete k (glava : rep) 
-	| k == 0 = rep
-	| otherwise = glava : delete (k - 1) rep
+delete 0 (glava : rep) = rep
+delete k (glava : rep) = delete (k - 1) rep
+-- delete k (glava : rep) 
+    -- | k == 0 = rep
+    -- | otherwise = glava : delete (k - 1) rep
 
 -- ***
 -- 'slice i k l' returns the sub-list of l from the i-th up to (excluding) the k-th element
@@ -88,9 +94,11 @@ slice = undefined
 -- ghci> insert 2 5 [0,0,0,0,0,0]
 -- [0,0,0,0,0,2,0]
 insert :: a -> Int -> [a] -> [a]
-insert x k (head : tail)
-	| k == 0 = x : head : tail
-	| otherwise = head : insert x (k - 1) tail
+insert x 0 l = l
+insert x k (glava : rep) = glava : insert x (k - 1) rep
+-- insert x k (head : tail)
+    -- | k == 0 = x : head : tail
+    -- | otherwise = head : insert x (k - 1) tail
 
 -- **
 -- 'rotate n l' rotates l to the left by n places
@@ -98,9 +106,11 @@ insert x k (head : tail)
 -- ghci> rotate 2 [1,2,3,4,5]
 -- [3,4,5,1,2]
 rotate :: Int -> [a] -> [a]
-rotate k (head : tail)
-	| k == 0 = head : tail
-	| otherwise = rotate (k - 1) tail ++ [head]
+rotate 0 l = l
+rotate k (glava : rep) = rotate (k - 1) (append rep [glava]) -- append namesto (++)
+-- rotate k (head : tail)
+    -- | k == 0 = head : tail
+    -- | otherwise = rotate (k - 1) (append tail [head])
 
 -- **
 -- 'remove x l' returns a l with *all* occurances of x removed
@@ -108,15 +118,17 @@ rotate k (head : tail)
 -- ghci> remove 'a' "abrakadabra"
 -- "brkdbr"
 -- remove :: a -> [a] -> [a]
--- remove x (head : tail)
-	-- | tail == [] = []
-	-- | x /= head = head : remove x tail
-	-- | x == head = remove x tail
-	
+remove x (head : tail)
+    | tail == [] = []
+    | x /= head = head : remove x tail
+    | x == head = remove x tail
+    
 -- **
 -- 'reverseLength lst' computes a couple of the reversed list of 'lst' and its length
 -- Note: you should compute both results with one single recursion.
-reverseLength = undefined
+reverseLength :: [a] -> ([a], Int)
+reverseLength (glava : []) = ([glava], 1)
+reverseLength (glava : rep) = (append (fst $ reverseLength rep) [glava], snd(reverseLength rep) + 1)
 
 -- ***
 -- 'isPalindrome lst' is a predicate that checks if 'lst' is a palindrome
@@ -139,7 +151,11 @@ isPalindrome = undefined
 -- Example:
 -- ghci> pointwiseMax [1,10,5,6] [2,3,7,4,8]
 -- [2,10,7,6]
-pointwiseMax = undefined
+pointwiseMax :: Ord a => [a] -> [a] -> [a]
+pointwiseMax [] l2 = []
+pointwiseMax l1 [] = l1
+pointwiseMax (glava1 : rep1) (glava2 : rep2) = (max glava1 glava2) : pointwiseMax rep1 rep2
+
 
 -- ****
 -- 'secondLargest l' returns the second largest element of l.
