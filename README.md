@@ -1,5 +1,1 @@
-# poskus
-
-prva vaja
-
-ŠE nekaj sem dodal. 
+# Vaje iz Programiranja1, Matematika. 
