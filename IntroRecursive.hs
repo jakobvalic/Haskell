@@ -64,7 +64,19 @@ double (glava : rep) = append (glava : [glava]) (double rep) -- :)
 -- Example:
 -- ghci> divide 2 [1,1,1,2,2,2]
 -- ([1,1],[1,2,2,2])
-divide = undefined
+prvi :: Int -> [a] -> [a]
+prvi 0 l = []
+prvi k (glava : rep) = glava : prvi (k - 1) rep
+
+zadnji :: Int -> [a] -> [a]
+zadnji 0 l = l
+zadnji k (glava : rep) = zadnji (k - 1) rep
+
+divide :: Int -> [a] -> ([a], [a])
+divide k l = (prvi k l, zadnji k l)
+
+-- divide 0 l = ([], l)
+-- divide k (glava, rep) = (glava : fst (divide (k - 1) rep), snd (divide (k - 1) rep)) --ZAKAJ NE DELA?
  
 
 -- **
@@ -86,7 +98,9 @@ delete k (glava : rep) = delete (k - 1) rep
 -- Example:
 -- ghci> slice 3 6 [0,0,0,1,2,3,0,0,0]
 -- [1,2,3]
-slice = undefined
+slice :: Int -> Int -> [a] -> [a]
+slice i k l = prvi (k - i) $ zadnji i l
+
 
 -- **
 -- 'insert x k l' inserts x at index k into l
