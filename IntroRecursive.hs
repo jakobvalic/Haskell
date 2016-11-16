@@ -142,7 +142,9 @@ remove x (head : tail)
 -- Note: you should compute both results with one single recursion.
 reverseLength :: [a] -> ([a], Int)
 reverseLength (glava : []) = ([glava], 1)
-reverseLength (glava : rep) = (append (fst $ reverseLength rep) [glava], snd(reverseLength rep) + 1)
+reverseLength (glava : rep) = (rep : l2, 1 + len)
+	where (l2, len) = reverseLength rep
+-- reverseLength (glava : rep) = (append (fst $ reverseLength rep) [glava], snd(reverseLength rep) + 1)
 
 -- ***
 -- 'isPalindrome lst' is a predicate that checks if 'lst' is a palindrome
@@ -167,7 +169,7 @@ isPalindrome = undefined
 -- [2,10,7,6]
 pointwiseMax :: Ord a => [a] -> [a] -> [a]
 pointwiseMax [] l2 = []
-pointwiseMax l1 [] = l1
+pointwiseMax l1 [] = []
 pointwiseMax (glava1 : rep1) (glava2 : rep2) = (max glava1 glava2) : pointwiseMax rep1 rep2
 
 
