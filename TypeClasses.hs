@@ -11,32 +11,44 @@ data Natural = Zero | Succ Natural deriving (Show)
 data Complex = Complex Double Double deriving (Show)
 
 data Polynomial = Polynomial [Rational] deriving (Show)
-
+    
 instance Num Natural where
-  Zero + n = n
-  (Succ m) + n = Succ (m + n)
-  Zero * n = Zero
-  (Succ m) * n = m * n + n
-  abs Zero = Zero
-  abs (Succ m) = Succ m
-  signum Zero = Zero
-  signum (Succ m) = Succ Zero --ti ga pretvori v Succ Zero
-  negate Zero = Zero
-  fromInteger 0 = Zero
-  fromInteger n = Succ (fromInteger (n - 1))
+    Zero + n = n
+    (Succ m) + n = Succ (m + n)
+    Zero * n = Zero
+    (Succ m) * n = m * n + n
+    abs Zero = Zero
+    abs (Succ m) = Succ m
+    signum Zero = Zero
+    signum (Succ m) = Succ Zero --ti ga pretvori v Succ Zero
+    negate Zero = Zero
+    negate n = undefined
+    fromInteger 0 = Zero
+    fromInteger n = Succ (fromInteger (n - 1))
 
 instance Num Complex where
-  (Complex x1 y1) + (Complex x2 y2) = Complex (x1 + x2) (y1 + y2)
-  (Complex x1 y1) * (Complex x2 y2) = Complex (x1 * x2) (y1 * y2)
-  abs (Complex x1 y1) = Complex (sqrt(x1 ** 2 + y1 ** 2)) 0 --vrnemo v obliki kompleksnega števila
-  --signum (Complex x1 y1) = Complex (cos x1 / y1) (sin x1 / y1) --vrnemo točko na enotski krožnici
-  fromInteger n = Complex (fromIntegral(n)) 0
-  negate (Complex x1 y1) = Complex (-x1) (-y1)
-  
+    (Complex x1 y1) + (Complex x2 y2) = Complex (x1 + x2) (y1 + y2)
+    (Complex x1 y1) * (Complex x2 y2) = Complex (x1 * x2 - y1 * y2) (x1 * y2 + x2 * y1)
+    abs (Complex x y) = Complex (x * x + y * y) 0 --vrnemo v obliki kompleksnega števila
+    --signum (Complex x1 y1) = Complex (cos x1 / y1) (sin x1 / y1) --vrnemo točko na enotski krožnici
+    fromInteger n = Complex (fromIntegral(n)) 0
+    negate (Complex x1 y1) = Complex (-x1) (-y1)
 
+-- vsotaSez :: [a] -> [a] -> [a]    
+-- vsotaSez [] y = y
+-- vsotaSez x [] = x
+-- vsotaSez (x:xs) (y:ys) = x + y + 0 : (xs + ys)  
+  
 instance Num Polynomial where
-  -- TODO
-  signum = error "Polynomial: operation signum does not make sense"
+    -- Polynomial x + Polynomial [] = Polynomial x
+    -- --Polynomial (x:xs) + Polynomial (y:ys) = Polynomial vsota where
+    -- [x + y] + 0:(Polynomial xs + Polynomial ys)
+    Polynomial [x] * Polynomial ys = Polynomial [x * y | y <- ys]
+    Polynomial (x:xs) * Polynomial ys = Polynomial [x] * Polynomial ys + Polynomial (0:zs)
+        where 
+            Polynomial zs = Polynomial xs * Polynomial ys     
+    -- --Polynomial x + Polynomial y = Polynomial [i + j | (i, j) <- zip (x y)]
+    signum = error "Polynomial: operation signum does not make sense"
 
 
 -- Algebraic structures
@@ -47,37 +59,75 @@ instance Num Polynomial where
 class  Semigroup a  where
     (***) :: a -> a -> a
 
-
-
 -- Define the following classes (extensions):
 -- + SemigroupWithUnit (with a special element "unit")
--- + Group (with an "inv" function)
--- + Ring
 
-class Semigroup a => SemigroupWithUnit a where
+class (Semigroup a) => SemigroupWithUnit a where
 	unit :: a
+
+-- + Group (with an "inv" function)
 
 class SemigroupWithUnit a => Group a where
 	inverz :: a -> a
+    
+-- + Ring
 
+class (Group a) => Ring a where
+    (###) :: a -> a -> a --množenje
+
+
+
+
+
+-- Show that the integers belong to the Ring class    
+
+instance Semigroup Integer where
+    n *** m = n + m
+    
+instance SemigroupWithUnit Integer where
+    unit = 0
+   
+instance Group Integer where
+    inverz n = -n
+    
+instance Ring Integer where
+    n ### m = n * m
+    
+        
+-- Show that Bool belongs to Group
+-- Bool je grupa za operacijo xOR
 instance Semigroup Bool where
-	(***) = (||) --(&&)
+	--(***) = (||) --(&&)
+    p *** q = p || q
 
 instance SemigroupWithUnit Bool	where
 	unit = False --(True)
 	
 instance Group Bool where
 	inverz True = False
-	inverz False = True
-	
--- Show that the integers belong to the Ring class
+	inverz False = True    
+    
+   
 
--- Show that Bool belongs to Group
+
 
 -- Show that the type [Z_2] as defined below belongs to Group
 
 data Z_2 =  Zero_2 | One_2 deriving (Show)
 
+instance Semigroup Z_2 where
+    Zero_2 *** Zero_2 = Zero_2
+    One_2 *** Zero_2  = One_2
+    Zero_2 *** One_2 = One_2
+    One_2 *** One_2 = One_2
+    
+instance SemigroupWithUnit Z_2 where
+    unit = Zero_2
+    
+instance Group z_2 where
+    inverz Zero_2 = One_2
+    inverz One_2 = Zero_2
+    
 
 -- Show that the cartesian product type of two types in the Group class belongs
 -- to the Group class
