@@ -85,7 +85,7 @@ instance Semigroup Integer where
     n *** m = n + m
     
 instance SemigroupWithUnit Integer where
-    unit = 0
+    unit = 0 
    
 instance Group Integer where
     inverz n = -n
