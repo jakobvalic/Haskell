@@ -95,11 +95,14 @@ add (Node h l a r) x
 
 -- With [add] implemented, we can easily construct an AVL tree from a list
 fromList :: (Ord a) => [a] -> AVL a
-fromList = undefined
+fromList [] = Leaf
+fromList (x:xs) = add drevo x
+    where drevo = fromList xs
 
 -- [minAVL t] finds the minimum element of [t]
 minAVL :: (Ord a) => AVL a -> Maybe a
-minAVL = undefined
+minAVL Leaf = Nothing
+minAVL (Node _ l a r) = undefined
 
 -- [delete t a] returns an AVL tree [t] with [a] removed
 delete :: Ord a => AVL a -> a -> AVL a
