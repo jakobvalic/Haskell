@@ -24,7 +24,7 @@ instance Num Natural where
     negate Zero = Zero
     negate n = undefined
     fromInteger 0 = Zero
-    fromInteger n = Succ (fromInteger (n - 1))
+    fromInteger n = Succ (fromInteger (n - 1)) --ne dela prav!!!
 
 instance Num Complex where
     (Complex x1 y1) + (Complex x2 y2) = Complex (x1 + x2) (y1 + y2)
@@ -124,9 +124,9 @@ instance Semigroup Z_2 where
 instance SemigroupWithUnit Z_2 where
     unit = Zero_2
     
-instance Group z_2 where
-    inverz Zero_2 = One_2
-    inverz One_2 = Zero_2
+-- instance Group z_2 where
+    -- inverz Zero_2 = One_2
+    -- inverz One_2 = Zero_2
     
 
 -- Show that the cartesian product type of two types in the Group class belongs
